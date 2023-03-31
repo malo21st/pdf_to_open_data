@@ -34,9 +34,9 @@ PROMPT_TEMPLATE = string.Template('''
 # function
 def convert_pdf_to_opendata(load_data):
     prompt = PROMPT_TEMPLATE.safe_substitute({"DATA": load_data[0].page_content})
-    result = llm(prompt)
-    data_json = eval(result)
-    data_df = pd.DataFrame(data_json)
+    data_json = llm(prompt)
+    data_lst = eval(data_json)
+    data_df = pd.DataFrame(data_lst)
     return data_json, data_df
 
 def line_graph(df):
@@ -55,7 +55,8 @@ data_json, data_df, load_data = list(), pd.DataFrame(), None
 with st.sidebar:
     pdf_file = st.file_uploader("PDF_DATA：", type={"pdf"})
     if pdf_file is not None:
-        loader = UnstructuredPDFLoader(pdf_file)
+        with st.spinner("只今、PDFからオープンデータに開放中・・・　しばらくお待ち下さい。"):
+            loader = UnstructuredPDFLoader(pdf_file)
         load_data = loader.load()
 
 if load_data is not None:
@@ -68,5 +69,5 @@ if not data_df.empty:
         label="JSONダウンロード",
         data=data_json,
         file_name='労働時間指数.json',
-        mime='json',
+        mime='text',
     )
