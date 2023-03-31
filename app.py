@@ -54,13 +54,13 @@ data_json, data_df, load_data = list(), pd.DataFrame(), None
 
 pdf_file = st.sidebar.file_uploader("PDFファイル：", type={"pdf"})
 if pdf_file is not None:
-    with st.spinner("只今、PDFからオープンデータに開放中・・・　しばらくお待ち下さい。"):
+    with st.sidebar.spinner("只今、PDFからオープンデータに開放中・・・　しばらくお待ち下さい。"):
         loader = UnstructuredPDFLoader(pdf_file)
         load_data = loader.load()
 
 if load_data is not None:
     data_json, data_df = convert_pdf_to_opendata(load_data)
-    st.dataframe(data_df, height=430)
+    st.dataframe(data_df, height=420)
     st.plotly_chart(line_graph(data_df))
 
 if not data_df.empty:
