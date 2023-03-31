@@ -65,7 +65,7 @@ pdf_file = st.sidebar.file_uploader("PDFファイル：", type={"pdf"})
 
 if pdf_file != st.session_state['pdf_file'] and pdf_file:
     try:
-        with st.spinner("只今、PDFからオープンデータに開放中・・・　しばらくお待ち下さい。"):
+        with st.spinner("只今、PDFからオープンデータへ開放中・・・　しばらくお待ち下さい。"):
             loader = UnstructuredPDFLoader(pdf_file)
             load_data = loader.load()
             data_json, data_df = convert_pdf_to_opendata(load_data)
