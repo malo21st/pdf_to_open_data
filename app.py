@@ -50,7 +50,7 @@ def line_graph(df):
 # Layout & Logic
 st.title("PDFからオープンデータに開放アプリ")
 
-data_json, data_df = list(), pd.DataFrame()
+data_json, data_df, load_data = list(), pd.DataFrame(), None
 
 with st.sidebar:
     pdf_file = st.file_uploader("PDF_DATA：", type={"pdf"})
@@ -58,7 +58,8 @@ with st.sidebar:
         loader = UnstructuredPDFLoader(pdf_file)
         load_data = loader.load()
 
-data_json, data_df = convert_pdf_to_opendata(load_data)
+if load_data:
+    data_json, data_df = convert_pdf_to_opendata(load_data)
 
 st.dataframe(data_df)
 st.plotly_chart(line_graph(data_df))
