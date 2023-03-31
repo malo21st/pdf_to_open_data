@@ -60,7 +60,7 @@ st.title("オープンデータ開放アプリ")
 
 pdf_file = st.sidebar.file_uploader("PDFファイル：", type={"pdf"})
 
-if st.sidebar.button('**オープンデータに開放**') and pdf_file:
+if pdf_file:
     try:
         with st.spinner("只今、PDFからオープンデータに開放中・・・　しばらくお待ち下さい。"):
             loader = UnstructuredPDFLoader(pdf_file)
@@ -75,6 +75,8 @@ if st.sidebar.button('**オープンデータに開放**') and pdf_file:
 elif not st.session_state['data_df'].empty:
     st.dataframe(st.session_state['data_df'], height=423)
     st.plotly_chart(line_graph(st.session_state['data_df']))
+
+if not st.session_state['data_df'].empty:
     st.sidebar.download_button(
         label="JSONダウンロード",
         data=st.session_state['data_json'],
