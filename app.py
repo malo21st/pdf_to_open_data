@@ -60,9 +60,8 @@ with st.sidebar:
 
 if load_data:
     data_json, data_df = convert_pdf_to_opendata(load_data)
-
-st.dataframe(data_df)
-st.plotly_chart(line_graph(data_df))
+    st.dataframe(data_df)
+    st.plotly_chart(line_graph(data_df))
 
 if not data_df.empty:
     st.sidebar.download_button(
