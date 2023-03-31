@@ -15,8 +15,11 @@ if 'data_json' not in st.session_state:
 
 if 'data_df' not in st.session_state:
     st.session_state['data_df'] = pd.DataFrame()
-    
-load_data, pdf_file = None, None
+
+if 'pdf_file' not in st.session_state:
+    st.session_state['pdf_file'] = ""
+
+load_data = None
 
 PROMPT_TEMPLATE = string.Template('''
 データは、PDF を UnstructuredPDFLoader によりテキスト化したものである。
@@ -60,7 +63,7 @@ st.title("オープンデータ開放アプリ")
 
 pdf_file = st.sidebar.file_uploader("PDFファイル：", type={"pdf"})
 
-if pdf_file:
+if pdf_file != st.session_state['pdf_file']:
     try:
         with st.spinner("只今、PDFからオープンデータに開放中・・・　しばらくお待ち下さい。"):
             loader = UnstructuredPDFLoader(pdf_file)
@@ -70,6 +73,7 @@ if pdf_file:
             st.plotly_chart(line_graph(data_df))
             st.session_state['data_json'] = data_json
             st.session_state['data_df'] = data_df
+            st.session_state['pdf_file'] = pdf_file
     except Exception:
         st.error(f'エラーが発生しました。　再度お試し下さい。')
 elif not st.session_state['data_df'].empty:
