@@ -17,7 +17,7 @@ if 'data_df' not in st.session_state:
     st.session_state['data_df'] = pd.DataFrame()
 
 if 'pdf_file' not in st.session_state:
-    st.session_state['pdf_file'] = " "
+    st.session_state['pdf_file'] = "init"
 
 load_data, pdf_file = None, None
 
