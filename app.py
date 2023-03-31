@@ -17,7 +17,7 @@ if 'data_df' not in st.session_state:
     st.session_state['data_df'] = pd.DataFrame()
 
 if 'pdf_file' not in st.session_state:
-    st.session_state['pdf_file'] = "init"
+    st.session_state['pdf_file'] = ""
 
 load_data, pdf_file = None, None
 
@@ -63,7 +63,7 @@ st.title("オープンデータ開放アプリ")
 
 pdf_file = st.sidebar.file_uploader("PDFファイル：", type={"pdf"})
 
-if pdf_file != st.session_state['pdf_file']:
+if pdf_file != st.session_state['pdf_file'] and pdf_file:
     try:
         with st.spinner("只今、PDFからオープンデータに開放中・・・　しばらくお待ち下さい。"):
             loader = UnstructuredPDFLoader(pdf_file)
