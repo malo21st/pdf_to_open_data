@@ -10,6 +10,14 @@ import os
 os.environ["OPENAI_API_KEY"] = st.secrets['api_key']
 llm = OpenAIChat(model_name="gpt-3.5-turbo", temperature=0.0)
 
+if 'data_json' not in st.session_state:
+    st.session_state['data_json'] = list()
+
+if 'data_df' not in st.session_state:
+    st.session_state['data_df'] = pd.DataFrame()
+    
+load_data, pdf_file = None, None
+
 PROMPT_TEMPLATE = string.Template('''
 データは、PDF を UnstructuredPDFLoader によりテキスト化したものである。
 平成24年から令和4年までの行をJSONデータに変換せよ。
@@ -50,8 +58,6 @@ def line_graph(df):
 # Layout & Logic
 st.title("オープンデータ開放アプリ")
 
-data_json, data_df, load_data, pdf_file = list(), pd.DataFrame(), None, None
-
 pdf_file = st.sidebar.file_uploader("PDFファイル：", type={"pdf"})
 
 if st.sidebar.button('**オープンデータに開放**') and pdf_file:
@@ -59,13 +65,11 @@ if st.sidebar.button('**オープンデータに開放**') and pdf_file:
         with st.spinner("只今、PDFからオープンデータに開放中・・・　しばらくお待ち下さい。"):
             loader = UnstructuredPDFLoader(pdf_file)
             load_data = loader.load()
+            data_json, data_df = convert_pdf_to_opendata(load_data)
+            st.dataframe(data_df, height=423)
+            st.plotly_chart(line_graph(data_df))
     except Exception:
         st.error(f'エラーが発生しました。　再度お試し下さい。')
-
-if load_data is not None:
-    data_json, data_df = convert_pdf_to_opendata(load_data)
-    st.dataframe(data_df, height=425)
-    st.plotly_chart(line_graph(data_df))
 
 if not data_df.empty:
     st.sidebar.download_button(
