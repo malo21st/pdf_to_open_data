@@ -58,7 +58,7 @@ with st.sidebar:
         loader = UnstructuredPDFLoader(pdf_file)
         load_data = loader.load()
 
- data_json, data_df = convert_pdf_to_opendata(load_data)
+data_json, data_df = convert_pdf_to_opendata(load_data)
 
 st.dataframe(data_df)
 st.plotly_chart(line_graph(data_df))
