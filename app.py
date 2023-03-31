@@ -50,17 +50,21 @@ def line_graph(df):
 # Layout & Logic
 st.title("オープンデータ開放アプリ")
 
-data_json, data_df, load_data = list(), pd.DataFrame(), None
+data_json, data_df, load_data, pdf_file = list(), pd.DataFrame(), None, None
 
 pdf_file = st.sidebar.file_uploader("PDFファイル：", type={"pdf"})
-if pdf_file is not None:
-    with st.spinner("只今、PDFからオープンデータに開放中・・・　しばらくお待ち下さい。"):
-        loader = UnstructuredPDFLoader(pdf_file)
-    load_data = loader.load()
+
+if st.sidebar.button('**オープンデータに開放**') and pdf_file:
+    try:
+        with st.spinner("只今、PDFからオープンデータに開放中・・・　しばらくお待ち下さい。"):
+            loader = UnstructuredPDFLoader(pdf_file)
+            load_data = loader.load()
+    except Exception:
+        st.error(f'エラーが発生しました。　再度お試し下さい。')
 
 if load_data is not None:
     data_json, data_df = convert_pdf_to_opendata(load_data)
-    st.dataframe(data_df, height=420)
+    st.dataframe(data_df, height=425)
     st.plotly_chart(line_graph(data_df))
 
 if not data_df.empty:
