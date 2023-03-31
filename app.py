@@ -53,7 +53,7 @@ st.title("PDFからオープンデータに開放アプリ")
 data_json, data_df, load_data = list(), pd.DataFrame(), None
 
 with st.sidebar:
-    pdf_file = st.file_uploader("PDF_DATA：", type={"pdf"})
+    pdf_file = st.file_uploader("PDFファイル：", type={"pdf"})
     if pdf_file is not None:
         with st.spinner("只今、PDFからオープンデータに開放中・・・　しばらくお待ち下さい。"):
             loader = UnstructuredPDFLoader(pdf_file)
