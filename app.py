@@ -17,9 +17,9 @@ if 'data_df' not in st.session_state:
     st.session_state['data_df'] = pd.DataFrame()
 
 if 'pdf_file' not in st.session_state:
-    st.session_state['pdf_file'] = ""
+    st.session_state['pdf_file'] = " "
 
-load_data = None
+load_data, pdf_file = None, None
 
 PROMPT_TEMPLATE = string.Template('''
 データは、PDF を UnstructuredPDFLoader によりテキスト化したものである。
