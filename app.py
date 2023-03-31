@@ -68,13 +68,15 @@ if st.sidebar.button('**オープンデータに開放**') and pdf_file:
             data_json, data_df = convert_pdf_to_opendata(load_data)
             st.dataframe(data_df, height=423)
             st.plotly_chart(line_graph(data_df))
+            st.session_state['data_json'] = data_json
+            st.session_state['data_df'] = data_df
     except Exception:
         st.error(f'エラーが発生しました。　再度お試し下さい。')
 
-if not data_df.empty:
+if not st.session_state['data_df'].empty:
     st.sidebar.download_button(
         label="JSONダウンロード",
-        data=data_json,
+        data=st.session_state['data_json'],
         file_name='労働時間指数.json',
         mime='text',
     )
