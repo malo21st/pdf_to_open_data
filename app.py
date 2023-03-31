@@ -72,8 +72,9 @@ if st.sidebar.button('**オープンデータに開放**') and pdf_file:
             st.session_state['data_df'] = data_df
     except Exception:
         st.error(f'エラーが発生しました。　再度お試し下さい。')
-
-if not st.session_state['data_df'].empty:
+elif not st.session_state['data_df'].empty:
+    st.dataframe(st.session_state['data_df'], height=423)
+    st.plotly_chart(line_graph(st.session_state['data_df']))
     st.sidebar.download_button(
         label="JSONダウンロード",
         data=st.session_state['data_json'],
