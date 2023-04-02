@@ -11,7 +11,7 @@ os.environ["OPENAI_API_KEY"] = st.secrets['api_key']
 llm = OpenAIChat(model_name="gpt-3.5-turbo", temperature=0.0)
 
 if 'data_json' not in st.session_state:
-    st.session_state['data_json'] = dict()
+    st.session_state['data_json'] = list()
 
 if 'data_df' not in st.session_state:
     st.session_state['data_df'] = pd.DataFrame()
@@ -23,21 +23,21 @@ load_data, pdf_file = None, None
 
 PROMPT_TEMPLATE = string.Template('''
 データは、PDF を UnstructuredPDFLoader によりテキスト化したものである。
-平成24年から令和4年までの行をJSONデータに変換せよ。
+平成24年から令和4年までの行をJSONに変換せよ。
 出力例は平成24年度の行をJSON化した場合の例である。
 
 # データ:
 {$DATA}
 
 # 出力例:
-{
+[
   {
     "年": "平成24年",
     "総労働時間": 109.4,
     "所定内労働時間": 109.6,
     "所定外労働時間": 105.6,
   },
-}
+]
 
 # JSON:
 ''')
