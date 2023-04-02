@@ -11,7 +11,7 @@ os.environ["OPENAI_API_KEY"] = st.secrets['api_key']
 llm = OpenAIChat(model_name="gpt-3.5-turbo", temperature=0.0)
 
 if 'data_json' not in st.session_state:
-    st.session_state['data_json'] = list()
+    st.session_state['data_json'] = dict()
 
 if 'data_df' not in st.session_state:
     st.session_state['data_df'] = pd.DataFrame()
@@ -30,14 +30,14 @@ PROMPT_TEMPLATE = string.Template('''
 {$DATA}
 
 # 出力例:
-[
+{
   {
     "年": "平成24年",
     "総労働時間": 109.4,
     "所定内労働時間": 109.6,
     "所定外労働時間": 105.6,
   },
-]
+}
 
 # JSON:
 ''')
