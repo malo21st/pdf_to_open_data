@@ -83,7 +83,7 @@ st.title("オープンデータ開放アプリ")
 mode = st.sidebar.radio("ＡＩ処理：", ("変換", "プログラム"), horizontal=True)
 pdf_file = st.sidebar.file_uploader("PDFファイル：", type={"pdf"})
 
-if st.sidebar.button('　実　行　') and (pdf_file != st.session_state['pdf_file']) and pdf_file:
+if st.sidebar.button('　実　行　') and pdf_file: # and (pdf_file != st.session_state['pdf_file'])
     try:
         with st.spinner("只今、PDFからオープンデータへ開放中・・・　しばらくお待ち下さい。"):
             loader = UnstructuredPDFLoader(pdf_file)
