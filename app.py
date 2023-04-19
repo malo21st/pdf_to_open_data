@@ -80,7 +80,7 @@ def line_graph(df):
 # Layout & Logic
 st.title("オープンデータ開放アプリ")
 
-mode = st.sidebar.radio("ＡＩ処理", ("変換", "プログラム"), horizontal=True)
+mode = st.sidebar.radio("ＡＩ処理：", ("変換", "プログラム"), horizontal=True)
 pdf_file = st.sidebar.file_uploader("PDFファイル：", type={"pdf"})
 
 if pdf_file != st.session_state['pdf_file'] and pdf_file:
