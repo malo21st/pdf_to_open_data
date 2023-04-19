@@ -6,6 +6,7 @@ import plotly.express as px
 import pandas as pd
 import string
 import json
+import re
 import os
 
 os.environ["OPENAI_API_KEY"] = st.secrets['api_key']
