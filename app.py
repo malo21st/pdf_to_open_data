@@ -92,6 +92,7 @@ if pdf_file != st.session_state['pdf_file'] and pdf_file:
                 data_json, data_df = convert_pdf_to_opendata(load_data)
             else:
                 data_json, data_df = convert_pdf_to_opendata_code(load_data)
+            st.json(data_json, expanded=False)
             st.dataframe(data_df, height=423)
             st.plotly_chart(line_graph(data_df))
             st.session_state['data_json'] = data_json
