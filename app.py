@@ -5,6 +5,7 @@ from langchain.llms import OpenAIChat
 import plotly.express as px
 import pandas as pd
 import string
+import json
 import os
 
 os.environ["OPENAI_API_KEY"] = st.secrets['api_key']
@@ -50,6 +51,23 @@ def convert_pdf_to_opendata(load_data):
     data_df = pd.DataFrame(data_lst)
     return data_json, data_df
 
+def convert_pdf_to_opendata_code(load_data):
+    years = ['平成24年', '25年', '26年', '27年', '28年', '29年', '30年', '令和元年', '2年', '3年', '4年']
+    data = str(load_data).split("'")[1]
+    nums = re.findall(r'\d+\.\d', data)
+    result = []
+    for i in range(11):
+        year_data = {
+            "年": years[i],
+            "総労働時間": float(nums[i]),
+            "所定内労働時間": float(nums[i + 22]),
+            "所定外労働時間": float(nums[i + 44]),
+        }
+        result.append(year_data)
+    data_json = json.dumps(result)
+    data_df = pd.DataFrame(result)
+    return data_json, data_df
+
 def line_graph(df):
     df_tidy = df.melt(id_vars=["年"], value_vars=["総労働時間", "所定内労働時間", "所定外労働時間"], 
                       var_name="労働時間", value_name="労働時間指数(令和２年=100)")
@@ -61,6 +79,7 @@ def line_graph(df):
 # Layout & Logic
 st.title("オープンデータ開放アプリ")
 
+mode = st.sidebar.radio("ＡＩ処理", ("変換", "プログラム"), horizontal=True)
 pdf_file = st.sidebar.file_uploader("PDFファイル：", type={"pdf"})
 
 if pdf_file != st.session_state['pdf_file'] and pdf_file:
@@ -68,7 +87,10 @@ if pdf_file != st.session_state['pdf_file'] and pdf_file:
         with st.spinner("只今、PDFからオープンデータへ開放中・・・　しばらくお待ち下さい。"):
             loader = UnstructuredPDFLoader(pdf_file)
             load_data = loader.load()
-            data_json, data_df = convert_pdf_to_opendata(load_data)
+            if mode == "変換":
+                data_json, data_df = convert_pdf_to_opendata(load_data)
+            else:
+                data_json, data_df = convert_pdf_to_opendata_code(load_data)
             st.dataframe(data_df, height=423)
             st.plotly_chart(line_graph(data_df))
             st.session_state['data_json'] = data_json
